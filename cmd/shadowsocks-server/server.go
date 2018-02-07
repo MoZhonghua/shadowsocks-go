@@ -85,6 +85,15 @@ func getRequest(conn *ss.Conn, auth bool) (host string, ota bool, err error) {
 	}
 	// parse port
 	port := binary.BigEndian.Uint16(buf[reqEnd-2 : reqEnd])
+	if len(config.DisAllowedPorts) != 0 {
+		for _, p := range config.DisAllowedPorts {
+			if port == p {
+				err = fmt.Errorf("port %d is disallowed", port)
+				return
+			}
+		}
+	}
+
 	host = net.JoinHostPort(host, strconv.Itoa(int(port)))
 	// if specified one time auth enabled, we should verify this
 	if auth || addrType&ss.OneTimeAuthMask > 0 {

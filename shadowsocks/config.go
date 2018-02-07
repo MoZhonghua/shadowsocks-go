@@ -36,6 +36,10 @@ type Config struct {
 	// The order of servers in the client config is significant, so use array
 	// instead of map to preserve the order.
 	ServerPassword [][]string `json:"server_password"`
+
+	// reject requests to address with these ports, for example:
+	// add port 25/465/993 to disable email-related traffic
+	DisAllowedPorts []uint16 `json:"disallowed_ports"`
 }
 
 var readTimeout time.Duration
